@@ -1,7 +1,7 @@
 pipeline {
     environment {
         // Reference the stored credentials by ID
-        DOCKER_CREDENTIALS = credentials('Docker-Hub)
+        DOCKER_CREDENTIALS = credentials('Docker-Hub')
     }
     agent any
     stages {
