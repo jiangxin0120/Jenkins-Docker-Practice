@@ -18,7 +18,7 @@ public class WelcomeServlet extends HttpServlet {
         if (hour < 12) {
             greeting = "Good morning";
         } else {
-            greeting = "Good afternoon";
+            greeting = "Good afternoon";//
         }
 
 
