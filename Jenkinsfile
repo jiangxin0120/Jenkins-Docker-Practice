@@ -1,18 +1,19 @@
 pipeline {
     agent any
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('Docker-Hub')
+    }
     stages {
         stage('Check out') {
             steps {
                 // Checkout from a Git repository
-                git url: 'https://github.com/jiangxin0120/lab2', credentialsId: 'Github-Token'
+                git 'https://github.com/jiangxin0120/lab2'
             }
         }
         stage('Build Maven project') {
             steps {
-                script {
-                    def mvnHome = tool 'Maven'
-                    sh "${mvnHome}/bin/mvn clean package"
-                }
+                // Build the Maven project
+                sh 'mvn clean package'
             }
         }
         stage('Docker build') {
@@ -23,9 +24,9 @@ pipeline {
         }
         stage('Docker login') {
             steps {
-                // Login to Docker Hub using the stored credentials
-                withCredentials([usernamePassword(credentialsId: 'Docker-Hub', usernameVariable: 'Username', passwordVariable: 'Password')]) {
-                    sh 'echo $DOCKER_PASS | docker login --username $DOCKER_USER --password-stdin'
+                withCredentials([usernamePassword(credentialsId: 'Docker-Hub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    // Use the credentials to login to Docker Hub
+                    sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
                 }
             }
         }
